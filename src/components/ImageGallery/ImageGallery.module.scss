@@ -1,0 +1,33 @@
+$indigo: #2c3e50;
+$indigo-dark: #34495e;
+$emerald: #2ecc71;
+$emerald-dark: #27ae60;
+$black: #0d0d0d;
+$dark-gray: #1e1e1e;
+$gray: #2a2a2a;
+$light-gray: #e0e0e0;
+$placeholder-gray: #6a6a6a;
+$red: #e74c3c;
+$red-dark: #c0392b;
+$white: #ffffff;
+
+.imageList {
+  column-count: 4;
+  column-gap: 16px;
+  padding: 24px 5%;
+  margin-bottom: 32px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba($black, 0.3);
+
+  @media (max-width: 1200px) {
+    column-count: 3;
+  }
+
+  @media (max-width: 768px) {
+    column-count: 2;
+  }
+
+  @media (max-width: 480px) {
+    column-count: 1;
+  }
+}

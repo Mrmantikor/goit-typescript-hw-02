@@ -1,0 +1,89 @@
+$indigo: #2c3e50;
+$indigo-dark: #34495e;
+$emerald: #2ecc71;
+$emerald-dark: #27ae60;
+$black: #0d0d0d;
+$dark-gray: #1e1e1e;
+$gray: #2a2a2a;
+$light-gray: #e0e0e0;
+$placeholder-gray: #6a6a6a;
+$red: #e74c3c;
+$red-dark: #c0392b;
+$white: #ffffff;
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes vibrate {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-1px);
+  }
+  40% {
+    transform: translateY(1px);
+  }
+  60% {
+    transform: translateY(-1px);
+  }
+  80% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.loadMoreBtnDiv {
+  display: flex;
+  justify-content: center;
+  margin: 60px auto;
+}
+
+.btnLoadMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(45deg, $indigo, $indigo-dark);
+  border: 2px solid $indigo;
+  border-radius: 14px;
+  padding: 14px 30px;
+  width: 220px;
+  height: 56px;
+  font-size: 16px;
+  font-weight: 600;
+  color: $light-gray;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba($indigo, 0.4);
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(45deg, $emerald, $emerald-dark);
+    border-color: $emerald;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 26px rgba($emerald, 0.6), 0 0 14px rgba($emerald, 0.4);
+    animation: pulse 1.5s ease infinite;
+
+    svg {
+      animation: vibrate 0.3s ease infinite;
+    }
+  }
+
+  svg {
+    color: $light-gray;
+    font-size: 20px;
+  }
+}

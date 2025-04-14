@@ -1,40 +1,93 @@
-import { useEffect, useState } from "react";
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import Loader from "./components/Loader/Loader";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import ImageModal from "./components/ImageModal/ImageModal";
+import { fetchPhotos } from "./apiService/fetchCardData";
 
 import "./App.scss";
-import ContactList from "./components/ContactList/ContactList";
-import SearchBox from "./components/SearchBox/SearchBox";
-import ContactForm from "./components/ContactForm/ContactForm";
-
-import contactsData from "./data/contacts.json";
-
-const CONTACTS_KEY = "initial-contacts";
-
-const initialContacts = () => {
-  const localStorageContacts = localStorage.getItem(CONTACTS_KEY);
-  return localStorageContacts ? JSON.parse(localStorageContacts) : contactsData;
-};
+import { useState, useEffect } from "react";
 
 function App() {
-  const [contacts, setContacts] = useState(initialContacts);
-  const [filter, setFilter] = useState("");
+  const [page, setPage] = useState({ currentPage: 1 });
+  const [photos, setPhotos] = useState([]);
+  const [param, setParam] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectImg, setSelectImg] = useState({
+    urls: {
+      regular: "",
+    },
+  });
+
+  const onSubmit = (query) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPhotos([]);
+    setPage({ currentPage: 1 });
+    setParam(query);
+  };
+
+  const onLoadMore = () => {
+    setPage((prevPage) => ({
+      ...prevPage,
+      currentPage: prevPage.currentPage + 1,
+    }));
+  };
+
+  const modalOpen = (imgData) => {
+    const { urls, alt_description, likes } = imgData;
+    setModalIsOpen(true);
+    setSelectImg({
+      urls,
+      alt_description,
+      likes,
+    });
+  };
+
+  const modalClose = () => {
+    setModalIsOpen(false);
+  };
 
   useEffect(() => {
-    localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+    if (!param) return;
+    setLoader(true);
 
-  const handleAddContact = (newContact) => {
-    setContacts((prevContacts) => [...prevContacts, newContact]);
-  };
+    async function getSearchData() {
+      try {
+        const data = await fetchPhotos(param, page.currentPage);
+        setPage((prevPage) => ({
+          ...prevPage,
+          totalPages: data.total_pages,
+        }));
 
-  const handleDeleteContact = (id) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== id)
-    );
-  };
+        setPhotos((prevPhotos) =>
+          page.currentPage === 1
+            ? data.results
+            : [...prevPhotos, ...data.results]
+        );
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoader(false);
+      }
+    }
+    getSearchData();
+  }, [param, page.currentPage]);
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  useEffect(() => {
+    if (page.currentPage > 1 && photos.length > 0) {
+      const scrollValue = window.innerHeight / 1.5;
+      const scrollTimeout = setTimeout(() => {
+        window.scrollBy({
+          top: scrollValue,
+          behavior: "smooth",
+        });
+      }, 100);
+      return () => clearTimeout(scrollTimeout);
+    }
+  }, [photos, page.currentPage]);
 
   return (
     <>
@@ -45,10 +98,21 @@ function App() {
       >
         Bohdan Vasylovych
       </a>
-      <h1>Phone book</h1>
-      <ContactForm onAdd={handleAddContact} />
-      <SearchBox value={filter} onFilter={setFilter} />
-      <ContactList contacts={filteredContacts} onDelete={handleDeleteContact} />
+      <SearchBar onSubmit={onSubmit} />
+      {error !== null ? (
+        <ErrorMessage error={error} />
+      ) : (
+        <ImageGallery data={photos} isOpen={modalOpen} />
+      )}
+      {loader && <Loader />}
+      {page.totalPages > page.currentPage && (
+        <LoadMoreBtn onLoadMore={onLoadMore} />
+      )}
+      <ImageModal
+        modal={modalIsOpen}
+        modalClose={modalClose}
+        selectedImage={selectImg}
+      />
     </>
   );
 }

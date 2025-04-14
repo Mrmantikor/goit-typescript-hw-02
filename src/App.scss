@@ -1,23 +1,6 @@
-h1 {
-  display: flex;
-  justify-content: center;
-  padding-top: 7rem;
-  position: relative;
-  font-size: 4rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background: linear-gradient(45deg, #ff416c, #ff4b2b, #f9d423, #34e89e);
-  background-size: 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientMove 4s ease infinite;
-  text-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-}
-
 .signature {
   position: fixed;
-  margin-top: 1rem;
+  top: 0;
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
