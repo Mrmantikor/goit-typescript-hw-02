@@ -5,27 +5,33 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { fetchPhotos } from "./apiService/fetchCardData";
+import { Image, SelectImg } from "./App.types";
 
 import "./App.scss";
 import { useState, useEffect } from "react";
 
 function App() {
-  const [page, setPage] = useState({ currentPage: 1 });
-  const [photos, setPhotos] = useState([]);
-  const [param, setParam] = useState("");
-  const [loader, setLoader] = useState(false);
-  const [error, setError] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectImg, setSelectImg] = useState({
-    urls: {
-      regular: "",
-    },
+  const [page, setPage] = useState<{ currentPage: number; totalPages: number }>(
+    {
+      currentPage: 1,
+      totalPages: 0,
+    }
+  );
+  const [photos, setPhotos] = useState<Image[]>([]);
+  const [param, setParam] = useState<string>("");
+  const [loader, setLoader] = useState<boolean>(false);
+  const [error, setError] = useState<unknown>(null);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectImg, setSelectImg] = useState<SelectImg>({
+    urls: { regular: "" },
+    alt_description: null,
+    likes: 0,
   });
 
-  const onSubmit = (query) => {
+  const onSubmit = (query: string): void => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     setPhotos([]);
-    setPage({ currentPage: 1 });
+    setPage({ currentPage: 1, totalPages: 0 });
     setParam(query);
   };
 
@@ -36,7 +42,7 @@ function App() {
     }));
   };
 
-  const modalOpen = (imgData) => {
+  const modalOpen = (imgData: SelectImg): void => {
     const { urls, alt_description, likes } = imgData;
     setModalIsOpen(true);
     setSelectImg({
