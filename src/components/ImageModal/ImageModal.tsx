@@ -1,8 +1,9 @@
 import ReactModal from "react-modal";
 import { SlLike } from "react-icons/sl";
+import { ImageModalProps } from "../../App.types";
 import s from "./ImageModal.module.scss";
 
-const ImageModal = ({ modal, modalClose, selectedImage }) => {
+const ImageModal = ({ modal, modalClose, selectedImage }: ImageModalProps) => {
   const { urls, alt_description, likes } = selectedImage;
 
   return (
@@ -13,7 +14,7 @@ const ImageModal = ({ modal, modalClose, selectedImage }) => {
       className={s.modal}
       ariaHideApp={false}
     >
-      <img src={urls.regular} alt={alt_description} />
+      <img src={urls.regular} alt={alt_description ?? "Image"} />
       <div className={s.text}>
         <p>
           <SlLike className={s.icon} size={24} />

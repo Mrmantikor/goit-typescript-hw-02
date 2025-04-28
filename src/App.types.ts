@@ -16,3 +16,23 @@ export interface SelectImg {
   alt_description?: string | null;
   likes?: number;
 }
+
+export interface ImageCardProps {
+  readonly cardData: Image;
+  readonly isOpen: (imgData: SelectImg) => void;
+}
+
+export interface ErrorMessageProps {
+  error: unknown;
+}
+
+export interface ImageGalleryProps {
+  readonly data: Image[];
+  readonly isOpen: (imgData: SelectImg) => void;
+}
+
+export interface ImageModalProps {
+  modal: boolean;
+  modalClose: () => void;
+  selectedImage: SelectImg;
+}
