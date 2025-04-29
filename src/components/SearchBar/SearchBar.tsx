@@ -2,12 +2,15 @@ import s from "./SearchBar.module.scss";
 import toast, { Toaster } from "react-hot-toast";
 import { TbSearch } from "react-icons/tb";
 import { IconContext } from "react-icons";
+import { SearchBarProps } from "../../App.types";
 
-const SearchBar = ({ onSubmit }) => {
-  const handleSubmit = (event) => {
+const SearchBar = ({ onSubmit }: SearchBarProps) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target;
-    const value = form.elements.search.value.trim();
+    const form = event.currentTarget;
+    const input = form.elements.namedItem("search") as HTMLInputElement;
+    const value = input.value.trim();
+
     value
       ? onSubmit(value)
       : toast.custom(
@@ -15,6 +18,7 @@ const SearchBar = ({ onSubmit }) => {
             You need to enter the text to find images
           </div>
         );
+
     form.reset();
   };
 
@@ -22,7 +26,7 @@ const SearchBar = ({ onSubmit }) => {
     <header className={s.header}>
       <form className={s.searchForm} onSubmit={handleSubmit}>
         <IconContext.Provider
-          value={{ color: "#55883B", size: 35, className: "submitIcon" }}
+          value={{ color: "#55883B", size: "35", className: "submitIcon" }}
         >
           <button className={s.submitButton} type="submit">
             <TbSearch />
@@ -37,11 +41,7 @@ const SearchBar = ({ onSubmit }) => {
           placeholder="Search images and photos"
         />
       </form>
-      <Toaster
-        containerStyle={{
-          top: 100,
-        }}
-      />
+      <Toaster containerStyle={{ top: 100 }} />
     </header>
   );
 };

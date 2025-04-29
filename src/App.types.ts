@@ -36,3 +36,11 @@ export interface ImageModalProps {
   modalClose: () => void;
   selectedImage: SelectImg;
 }
+
+export interface LoadMoreBtnProps {
+  onLoadMore: () => void;
+}
+
+export interface SearchBarProps {
+  onSubmit: (value: string) => void;
+}
