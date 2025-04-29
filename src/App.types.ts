@@ -44,3 +44,8 @@ export interface LoadMoreBtnProps {
 export interface SearchBarProps {
   onSubmit: (value: string) => void;
 }
+
+export interface SearchResponseProps {
+  total_pages: number;
+  results: Image[];
+}

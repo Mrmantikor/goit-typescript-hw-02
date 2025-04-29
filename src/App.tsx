@@ -5,7 +5,7 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { fetchPhotos } from "./apiService/fetchCardData";
-import { Image, SelectImg } from "./App.types";
+import { Image, SearchResponseProps, SelectImg } from "./App.types";
 
 import "./App.scss";
 import { useState, useEffect } from "react";
@@ -62,7 +62,11 @@ function App() {
 
     async function getSearchData() {
       try {
-        const data = await fetchPhotos(param, page.currentPage);
+        const data: SearchResponseProps = await fetchPhotos(
+          param,
+          page.currentPage
+        );
+
         setPage((prevPage) => ({
           ...prevPage,
           totalPages: data.total_pages,
@@ -79,6 +83,7 @@ function App() {
         setLoader(false);
       }
     }
+
     getSearchData();
   }, [param, page.currentPage]);
 
